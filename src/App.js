@@ -51,30 +51,52 @@ const App = () => {
     getDataFromApi();
   }, []);
 
-  const onClick = async (e) => {
-    setLoading(true);
-    const request = await fetch(
-      'https://covid19.mathdro.id/api/countries/' + counterName
-    );
-    const data = await request.json();
+  useEffect(() => {
+    const getDatFromApi = async (e) => {
+      if (!counterName) {
+        return;
+      }
+      setLoading(true);
+      const request = await fetch(
+        'https://covid19.mathdro.id/api/countries/' + counterName
+      );
+      const data = await request.json();
 
-    setLoading(false);
-    if (request.status !== 200) {
-      alert(data.error.message);
-      return;
-    }
-    setSearchedCountry(counterName);
-    setConfirmedCount(data.confirmed.value);
-    setDeathCount(data.deaths.value);
-    setLastUpdate(data.lastUpdate);
-    setCountryName('');
-  };
+      setLoading(false);
+      if (request.status !== 200) {
+        return;
+      }
+      setSearchedCountry(counterName);
+      setConfirmedCount(data.confirmed.value);
+      setDeathCount(data.deaths.value);
+      setLastUpdate(data.lastUpdate);
+      setCountryName('');
+    };
 
-  console.log('Hey from react');
+    getDatFromApi();
+  }, [counterName]);
+
   return (
     <div className='container'>
+      <h1 className='text-center'>Covid-19 tracker</h1>
+      <img
+        src={imge}
+        width='800rem'
+        height='500rem'
+        alt='covid19'
+        className='rounded mx-auto d-block'
+      ></img>
+      <div className='input-group  mt-3'>
+        <input
+          type='text'
+          value={counterName}
+          onChange={(e) => setCountryName(e.target.value)}
+          className='form-control'
+          placeholder='Country name'
+        />
+      </div>
       {loading ? (
-        <div className='d-flex justify-content-center'>
+        <div className='d-flex flex-col justify-content-center mt-3'>
           <div
             style={{ width: '10rem', height: '10rem' }}
             className='spinner-border'
@@ -85,54 +107,26 @@ const App = () => {
         </div>
       ) : (
         <>
-          <h1 className='text-center'>Covid-19 tracker</h1>
-          <img
-            src={imge}
-            width='800rem'
-            height='500rem'
-            alt='covid19'
-            className='rounded mx-auto d-block'
-          ></img>
-          <div className='input-group  mt-3'>
-            <input
-              type='text'
-              value={counterName}
-              onChange={(e) => setCountryName(e.target.value)}
-              className='form-control'
-              placeholder='Country name'
-            />
-            <button
-              onClick={onClick}
-              className='btn btn-outline-secondary'
-              type='button'
-            >
-              Get data
-            </button>
+          <h3 className='text-center mt-3 w-100'>
+            The total number of covid 19 cases for{' '}
+            <span style={{ color: 'red' }}>{searchedCountry}</span> as follow :
+          </h3>
 
-            <h3 className='text-center mt-3 w-100'>
-              The total number of covid 19 cases for{' '}
-              <span style={{ color: 'red' }}>{searchedCountry}</span> as follow
-              :
-            </h3>
-
-            <div className='data mt-3'>
-              <div className='text-center'>
-                <h3>Confirmed count</h3>
-                <h3>{confirmedCount}</h3>
-              </div>
-              <div className='text-center'>
-                <h3>Deaths count</h3>
-                <h3>{deathCount}</h3>
-              </div>
+          <div className='data mt-3'>
+            <div className='text-center'>
+              <h3>Confirmed count</h3>
+              <h3>{confirmedCount}</h3>
             </div>
-
-            <h4 className='text-center mt-3 w-100'>
-              Last update : {lastUpdate}
-            </h4>
-            <h4 className='text-center mt-3 w-100'>
-              <a href={source}>Source </a>{' '}
-            </h4>
+            <div className='text-center'>
+              <h3>Deaths count</h3>
+              <h3>{deathCount}</h3>
+            </div>
           </div>
+
+          <h4 className='text-center mt-3 w-100'>Last update : {lastUpdate}</h4>
+          <h4 className='text-center mt-3 w-100'>
+            <a href={source}>Source </a>{' '}
+          </h4>
         </>
       )}
     </div>
