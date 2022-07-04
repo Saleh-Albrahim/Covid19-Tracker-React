@@ -70,6 +70,10 @@ const App = () => {
     setCountryName('');
   };
 
+  const onPress = async (e) => {
+    console.log('On press added !');
+  };
+
   console.log('Hey from react');
   return (
     <div className='container'>
