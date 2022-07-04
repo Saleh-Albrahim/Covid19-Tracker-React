@@ -75,6 +75,11 @@ const App = () => {
     console.log('On press added 2!');
   };
 
+  const onDelete = async (e) => {
+    console.log('On press added !');
+    console.log('On press added 2!');
+  };
+
   console.log('Hey from react');
   return (
     <div className='container'>
